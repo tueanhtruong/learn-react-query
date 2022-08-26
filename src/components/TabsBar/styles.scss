@@ -1,0 +1,70 @@
+@use 'src/scss/vars' as *;
+@use 'src/scss/mixin' as *;
+
+.cmp-tab-tabs {
+  display: flex;
+  margin-bottom: 24px;
+  position: relative;
+
+  .cmp-tab-tab {
+    margin-right: 40px;
+    font-size: 16px;
+    font-weight: $font-weight-medium;
+    color: $color-placeholder;
+    padding-bottom: 8px;
+    @include hover;
+
+    &__wrapper {
+      border-bottom: $default-border;
+      padding-bottom: 4px;
+    }
+
+    &__bar {
+      flex-flow: row nowrap;
+      overflow: hidden;
+      white-space: nowrap;
+      &::-webkit-scrollbar {
+        height: 6px;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 32px;
+      }
+    }
+
+    &__selected {
+      color: $color-primary;
+    }
+
+    &__side-button {
+      transform: translateY(-8px);
+    }
+
+    &__highlight {
+      height: 2px;
+      background-color: $color-primary;
+      position: absolute;
+      bottom: 0;
+      transition: $default-transition-med;
+
+      &--no-transition {
+        transition: none;
+      }
+      &--hidden {
+        display: none;
+      }
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  @include mobileScreen {
+    justify-content: space-evenly;
+    .ctn-trip-tab {
+      margin-right: 16px;
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+}

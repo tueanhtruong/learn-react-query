@@ -1,0 +1,42 @@
+{
+  "cSpell.words": [
+    "Formik",
+    "formik",
+    "buildspec",
+    "commitlint",
+    "Toastify",
+    "toastify",
+    "mui-datatables",
+    "datepicker",
+    "Signin",
+    "signin",
+    "datahouse",
+    "Datahouse",
+    "Webadmin",
+    "webadmin",
+    "checkin",
+    "Checkin",
+    "QRCODE"
+  ],
+  "files.exclude": {
+    ".husky": true,
+    "bin": true
+  },
+  "files.eol": "\n",
+  "editor.tabSize": 2,
+  "editor.renderWhitespace": "all",
+  "editor.formatOnSave": true,
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+  "jest.autoRun": "off"
+}

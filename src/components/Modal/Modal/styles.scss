@@ -1,0 +1,139 @@
+@use 'src/scss/vars' as *;
+@use 'src/scss/mixin' as *;
+
+.cmp-modal {
+  &.is-active {
+    z-index: 199;
+  }
+
+  &--close &__container {
+    animation: close 0.2s ease-in-out forwards;
+  }
+
+  &__container {
+    margin: auto;
+    position: relative;
+    transform: scale(0);
+    animation: showup 0.3s ease-in-out forwards;
+    padding: 8px;
+    // flex-grow: 1;
+    // max-width: $secondary-container-width;
+    // width: 100%;
+
+    @include mobileScreen {
+      width: 100vw;
+    }
+  }
+
+  & &__content.modal-content {
+    width: 100%;
+    height: 100%;
+    padding: 18px 56px;
+    margin: 0;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: $default-shadow;
+
+    @include mobileScreen {
+      padding: 18px 16px 24px;
+    }
+  }
+  & &__content--overflow-visible.modal-content {
+    overflow: visible !important;
+  }
+  & &__content.confirmation-code-modal {
+    @include mobileScreen {
+      padding: 18px 56px;
+    }
+  }
+
+  &__close {
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+
+  @keyframes close {
+    0% {
+      transform: none;
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
+
+  @keyframes showup {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: none;
+    }
+  }
+}
+
+.ctn-modal {
+  &__content {
+    position: relative;
+    text-align: left;
+    // width: 440px;
+    // max-width: $form-width-normal;
+    width: 100%;
+    margin: auto;
+
+    &__title {
+      font-size: 18px;
+      font-style: normal;
+      font-weight: 600;
+      line-height: 32px;
+    }
+
+    &__message {
+      // font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    &__footer {
+      margin: 0px -56px;
+      position: relative;
+      border-top: 1px solid #e0e0e0;
+      padding: 16px 56px 0;
+      @include mobileScreen {
+        margin: 0px -16px;
+        padding: 16px 16px 0;
+      }
+    }
+
+    @include mobileScreen {
+      width: 100%;
+      padding: 0;
+      min-width: 0;
+    }
+  }
+
+  &__content.ctn-modal-content {
+    &__body {
+      text-align: left;
+      min-width: $form-width-mini;
+      width: fit-content;
+
+      @include mobileScreen {
+        min-width: auto;
+        width: 100%;
+        text-align: justify;
+      }
+    }
+  }
+
+  &__loading {
+    pointer-events: none;
+    opacity: 0.3;
+  }
+}

@@ -1,0 +1,19 @@
+.cmp-view {
+  &--scrollable {
+    overflow-y: scroll;
+  }
+
+  &__terms-conditions {
+    background-color: #fafafa;
+    max-height: 400px;
+    max-width: 1110px;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #e0e0e0;
+    }
+  }
+}
