@@ -8,12 +8,9 @@ import { SidebarMenu } from 'src/appConfig/sidebar';
 import { hasPagePermission } from 'src/validations/permissions';
 import './styles.scss';
 import { IMAGES } from 'src/appConfig/images';
-import { setCollapseSidebar } from 'src/redux/content/contentSlice';
+import { setCollapseSidebar } from 'src/redux/common/commonSlice';
 import { Navigator } from 'src/services';
-// import { setCollapseSidebar } from 'src/redux/commonRedux/actions';
-// import { Navigator } from 'src/services';
 
-// More info: https://www.npmjs.com/package/react-pro-sidebar
 const Sidebar: React.FC<Props> = ({
   showMiniSidebar,
   showSidebar,
@@ -73,7 +70,6 @@ const Sidebar: React.FC<Props> = ({
                     //   ? Navigator.jumpToWebAdmin(item.href)
                     //   : Navigator.jumpToWebApp(item.href)
                   }
-                  // activeClassName="cmp-sidebar__item--active"
                 >
                   {item.icon}
                   <View
@@ -115,9 +111,9 @@ const Sidebar: React.FC<Props> = ({
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 const mapStateToProps = (state: IRootState) => ({
   // myPermissions: state.myPermissions,
-  isCollapse: state.content.collapseSidebar,
-  showMiniSidebar: state.content.showMiniSidebar,
-  showSidebar: state.content.showSidebar,
+  isCollapse: state.common.collapseSidebar,
+  showMiniSidebar: state.common.showMiniSidebar,
+  showSidebar: state.common.showSidebar,
 });
 
 const mapDispatchToProps = {

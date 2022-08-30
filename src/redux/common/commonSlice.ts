@@ -1,7 +1,8 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
+import { setAuthenticated } from '../auth/authSlice';
 
-export interface IContentState {
+export interface ICommonState {
   loading: boolean;
   screenWidth: number;
   collapseSidebar: boolean;
@@ -10,7 +11,7 @@ export interface IContentState {
   showNavbar: boolean;
 }
 
-const initialState: IContentState = {
+const initialState: ICommonState = {
   loading: false,
   screenWidth: 0,
   collapseSidebar: false,
@@ -19,8 +20,8 @@ const initialState: IContentState = {
   showNavbar: false,
 };
 
-export const contentSlice = createSlice({
-  name: 'content',
+export const commonSlice = createSlice({
+  name: 'common',
   initialState,
   reducers: {
     setScreenWidth: (state, action: PayloadAction<number>) => {
@@ -39,6 +40,12 @@ export const contentSlice = createSlice({
       state.showSidebar = action.payload;
     },
   },
+  extraReducers: {
+    [setAuthenticated.type]: (state, action: PayloadAction<boolean>) => {
+      state.showSidebar = action.payload;
+      state.showNavbar = action.payload;
+    },
+  },
 });
 
 // Action creators are generated for each case reducer function
@@ -48,8 +55,8 @@ export const {
   setShowMiniSidebar,
   setShowNavbar,
   setShowSidebar,
-} = contentSlice.actions;
+} = commonSlice.actions;
 
-export const contentState = contentSlice.getInitialState();
+export const commonState = commonSlice.getInitialState();
 
-export default contentSlice.reducer;
+export default commonSlice.reducer;

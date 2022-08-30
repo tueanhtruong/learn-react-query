@@ -40,11 +40,11 @@ type Props = ReturnType<typeof mapStateToProps> &
   HTMLProps<HTMLDivElement>;
 
 const mapStateToProps = (state: IRootState) => ({
-  showNavbar: state.content.showNavbar,
-  showSidebar: state.content.showSidebar,
-  collapseSidebar: state.content.collapseSidebar,
-  showMiniSidebar: state.content.showMiniSidebar,
-  // changingLocale: state.content.changingLocale,
+  showNavbar: state.common.showNavbar,
+  showSidebar: state.common.showSidebar,
+  collapseSidebar: state.common.collapseSidebar,
+  showMiniSidebar: state.common.showMiniSidebar,
+  // changingLocale: state.common.changingLocale,
 });
 
 const mapDispatchToProps = {};

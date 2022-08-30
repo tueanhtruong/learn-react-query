@@ -21,7 +21,6 @@ import ResponsiveContainer from './StartupContainers/ResponsiveContainer';
 import Signup from './UAMContainer/Signup';
 import ForgotPassword from './UAMContainer/ForgotPassword';
 import ResetPassword from './UAMContainer/ResetPassword';
-import Welcome from './UAMContainer/Welcome';
 import ProfileContainers from './ProfileContainers';
 import ContentContainer from './StartupContainers/ContentContainer';
 import Sidebar from 'src/components/Sidebar';
@@ -40,7 +39,6 @@ const Routing: React.FC<{ location: Location }> = (props) => {
       <Navbar />
       <Switch location={props.location}>
         <Route path={PATHS.root} render={() => <Redirect to={PATHS.signIn} />} exact />
-        <CustomRoute path={PATHS.welcome} component={Welcome} />
         <CustomRoute path={PATHS.signIn} component={Signin} />
         {/* <CustomRoute path={PATHS.signIn} component={TestSignIn} /> */}
         <CustomRoute path={PATHS.signUp} component={Signup} />

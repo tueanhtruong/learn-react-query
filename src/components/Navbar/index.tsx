@@ -5,7 +5,9 @@ import { FiLogOut, FiUser } from 'react-icons/fi';
 import { connect } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { HIDE_NAV_PATHS, PATHS } from 'src/appConfig/paths';
-import { setCollapseSidebar } from 'src/redux/content/contentSlice';
+import { useLogout } from 'src/queries';
+import { setAuthenticated } from 'src/redux/auth/authSlice';
+import { setCollapseSidebar } from 'src/redux/common/commonSlice';
 import { IRootState } from 'src/redux/rootReducer';
 import { Callback } from 'src/redux/types';
 import { Navigator } from 'src/services';
@@ -36,15 +38,12 @@ type NavItemType = {
 };
 
 const Navbar: React.FC<Props> = ({
-  user,
   showNavbar,
   showSidebar,
-  // showSecondBurger,
   collapseSidebar,
   isAuthenticated,
   showMiniSidebar,
-  onSetCollapseSidebar,
-  // onSignOut,
+  onSetAuth,
 }) => {
   const [toggleNavbar, setToggleNavbar] = useState(false);
   const navbarRef = useRef<HTMLElement>(null);
@@ -52,11 +51,18 @@ const Navbar: React.FC<Props> = ({
 
   const location = useLocation();
 
+  const { logout } = useLogout();
+
   const getUserName = () => {
     return 'Anonymous';
   };
   const getUserNameKey = () => {
     return '--';
+  };
+
+  const handleLogout = () => {
+    onSetAuth(false);
+    logout();
   };
 
   // menu
@@ -110,7 +116,7 @@ const Navbar: React.FC<Props> = ({
         {
           icon: <FiLogOut className="mr-8" />,
           label: 'Sign Out',
-          onClick: () => console.log('onSignOut(): '),
+          onClick: handleLogout,
         },
       ],
     },
@@ -252,16 +258,16 @@ const Navbar: React.FC<Props> = ({
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 const mapStateToProps = (state: IRootState) => ({
-  user: state.auth.cognitoUser,
   isAuthenticated: state.auth.isAuthenticated,
-  collapseSidebar: state.content.collapseSidebar,
-  showSidebar: state.content.showSidebar,
-  showNavbar: state.content.showNavbar,
-  showMiniSidebar: state.content.showMiniSidebar,
+  collapseSidebar: state.common.collapseSidebar,
+  showSidebar: state.common.showSidebar,
+  showNavbar: state.common.showNavbar,
+  showMiniSidebar: state.common.showMiniSidebar,
 });
 
 const mapDispatchToProps = {
   onSetCollapseSidebar: setCollapseSidebar,
+  onSetAuth: setAuthenticated,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

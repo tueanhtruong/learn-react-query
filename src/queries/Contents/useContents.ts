@@ -1,5 +1,5 @@
 import { useQuery, UseQueryOptions } from 'react-query';
-import { ContentStore } from 'src/redux/content/types';
+import { ContentStore } from 'src/redux/common/types';
 import apiClient from '../apiClient';
 import { responseWrapper } from '../helpers';
 import { API_QUERIES } from '../keys';

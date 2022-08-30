@@ -21,7 +21,7 @@ const Logo: React.FC<Props> = ({
   title = LogoName.title,
   titleSize = 20,
   subTitle = LogoName.subTitle,
-  subTitleSize = 16,
+  subTitleSize = 14,
   spacing = 16,
   onClick,
   hideTitle,
@@ -76,33 +76,30 @@ const Logo: React.FC<Props> = ({
           <ListItemText
             primary={
               !hideTitle ? (
-                <>
-                  <Text
-                    size={titleSize}
-                    className={`fw-bold text-color-primary-800 ml-${spacing}`}
-                    color={titleColor ? titleColor : undefined}
-                  >
-                    {title}
-                  </Text>
-                </>
-              ) : (
-                <></>
-              )
+                <span
+                  className={`fw-bold text-color-primary-800 ml-${spacing}`}
+                  style={{
+                    color: titleColor,
+                    fontSize: titleSize,
+                  }}
+                >
+                  {title}
+                </span>
+              ) : null
             }
             secondary={
               !hideSubTitle ? (
-                <>
-                  <Text
-                    size={subTitleSize}
-                    className={`fw-normal text-color-gray-400 ml-${spacing}`}
-                    color={subTitleColor ? subTitleColor : undefined}
-                  >
-                    {subTitle}
-                  </Text>
-                </>
-              ) : (
-                <></>
-              )
+                <span
+                  className={`fw-normal text-color-gray-400 ml-${spacing}`}
+                  style={{
+                    color: subTitleColor,
+                    fontSize: subTitleSize,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {subTitle}
+                </span>
+              ) : null
             }
           />
         </ListItem>

@@ -22,7 +22,7 @@ export function useProfile(options?: UseQueryOptions<User, Error>) {
 
   const queryClient = useQueryClient();
 
-  const handleSetProfile = (value: User) => queryClient.setQueryData(API_QUERIES.PROFILE, value);
+  const handleSetStaleProfile = () => queryClient.invalidateQueries(API_QUERIES.PROFILE);
 
   return {
     profile,
@@ -30,6 +30,6 @@ export function useProfile(options?: UseQueryOptions<User, Error>) {
     isError,
     loading: isFetching,
     getMyProfile,
-    handleSetProfile,
+    handleSetStaleProfile,
   };
 }

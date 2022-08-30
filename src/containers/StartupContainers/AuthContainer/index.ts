@@ -6,18 +6,12 @@ import { withRouter } from 'react-router-dom';
 import { useComponentDidMount } from 'src/hooks';
 import { useProfile, useTravelers, useTrips } from 'src/queries';
 import { setAuthenticated } from 'src/redux/auth/authSlice';
-import { setShowNavbar, setShowSidebar } from 'src/redux/content/contentSlice';
 import { IRootState } from 'src/redux/rootReducer';
 import { TokenService } from 'src/services';
 
-const AuthContainer: React.FC<Props> = ({
-  history,
-  onSetAuth,
-  onSetShowNavBar,
-  onSetShowSidebar,
-}) => {
+const AuthContainer: React.FC<Props> = ({ history, onSetAuth }) => {
   // =========================== Didmount ===========================
-  const { getMyProfile, handleSetProfile } = useProfile({
+  const { getMyProfile, handleSetStaleProfile } = useProfile({
     onSuccess(data) {
       if (data) handleSetAuthenticated();
     },
@@ -51,8 +45,6 @@ const AuthContainer: React.FC<Props> = ({
 
   const handleSetAuthenticated = () => {
     onSetAuth(true);
-    onSetShowNavBar(true);
-    onSetShowSidebar(true);
   };
 
   const authLogin = (res: { payload: { event: string; data?: any } }) => {
@@ -75,17 +67,13 @@ const AuthContainer: React.FC<Props> = ({
   };
 
   const clearAuth = () => {
-    console.log('call clearAuth: ');
     onSetAuth(false);
-    handleSetProfile(null);
-    onSetShowNavBar(false);
-    onSetShowSidebar(false);
+    handleSetStaleProfile();
     handleSetStaleData();
     handleSetStaleTripData();
   };
 
   const authenticate = () => {
-    console.log('call authenticate: ');
     // 2. Get current user
     Auth.currentAuthenticatedUser()
       .then((user) => {
@@ -107,8 +95,6 @@ const mapStateToProps = (state: IRootState) => ({
 
 const mapDispatchToProps = {
   onSetAuth: setAuthenticated,
-  onSetShowNavBar: setShowNavbar,
-  onSetShowSidebar: setShowSidebar,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthContainer));

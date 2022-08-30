@@ -1,4 +1,4 @@
-import { ContentStore } from 'src/redux/content/types';
+import { ContentStore } from 'src/redux/common/types';
 
 export const LOCAL_STORAGE_CONTENT = 'content';
 

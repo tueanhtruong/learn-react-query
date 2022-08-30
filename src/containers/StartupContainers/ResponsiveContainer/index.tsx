@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import useMeasure from 'src/hooks/useMeasure';
-import { setCollapseSidebar, setShowMiniSidebar } from 'src/redux/content/contentSlice';
+import { setCollapseSidebar, setShowMiniSidebar } from 'src/redux/common/commonSlice';
 // import { setCollapseSidebar, setShowMiniSidebar } from 'src/redux/commonRedux/actions';
 import { IRootState } from 'src/redux/rootReducer';
 import './styles.scss';
@@ -41,8 +41,8 @@ type Props = ReturnType<typeof mapStateToProps> &
   };
 
 const mapStateToProps = (state: IRootState) => ({
-  isCollapse: state.content.collapseSidebar,
-  isMiniSidebar: state.content.showMiniSidebar,
+  isCollapse: state.common.collapseSidebar,
+  isMiniSidebar: state.common.showMiniSidebar,
 });
 
 const mapDispatchToProps = {

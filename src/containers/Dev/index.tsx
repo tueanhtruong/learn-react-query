@@ -617,7 +617,7 @@ const Dev: React.FC<Props> = ({ showModal, closeModal, collapseSidebar }) => {
 
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 
-const mapStateToProps = (state: IRootState) => ({ collapseSidebar: state.content.collapseSidebar });
+const mapStateToProps = (state: IRootState) => ({ collapseSidebar: state.common.collapseSidebar });
 
 const mapDispatchToProps = {
   showModal: showModal,

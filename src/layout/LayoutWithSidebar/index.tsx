@@ -7,7 +7,7 @@ import { View } from 'src/components/common';
 // import { useComponentDidMount } from 'src/hooks';
 import './styles.scss';
 import { IRootState } from 'src/redux/store';
-import { setScreenWidth } from 'src/redux/content/contentSlice';
+import { setScreenWidth } from 'src/redux/common/commonSlice';
 // import { setShowSecondBurger } from 'src/redux/commonRedux/actions';
 
 const LayoutWithSidebar: React.FC<Props> = ({ sidebar, body, footer }) => {

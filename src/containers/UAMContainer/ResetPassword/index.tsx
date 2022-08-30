@@ -33,7 +33,7 @@ type FormValue = {
 
 const INTIAL = { password: '', email: '', code: '' };
 
-const ResetPassword: React.FC<Props> = ({ error, location }) => {
+const ResetPassword: React.FC<Props> = ({ location }) => {
   // const query = new URLSearchParams(location.search);
   const query = new URLSearchParams(location.search);
 
@@ -48,21 +48,8 @@ const ResetPassword: React.FC<Props> = ({ error, location }) => {
     },
   });
 
-  // const { forgotPassword } = useForgotPassword();
-
-  // const handleSendAgain = (email: string) => {
-  //   forgotPassword({ email });
-  // };
-
   useEffect(() => {
-    // const state = getLocationState(location);
-    // if (!state?.email) {
-    //   Navigator.navigate(PATHS.forgotPassword);
-    //   return;
-    // }
-    // formRef.current.setValues({ email: state.email as string, password: '', code: '' });
     // Check for query params "email" and "token". Should be included in link sent to email from forgot password submission.
-    // setEmail(state.email as string);
     if (!query.has('email') || !query.has('token')) {
       Navigator.navigate(PATHS.forgotPassword);
     }
@@ -85,13 +72,7 @@ const ResetPassword: React.FC<Props> = ({ error, location }) => {
 
   // =========================== SCHEMA ===========================
   const ResetSchema = Yup.object().shape({
-    password: Yup.string()
-      .required()
-      .min(8, 'Must have at least 8 characters')
-      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/, {
-        message:
-          'Must include at least one lowercase character, one uppercase character, one number, and a special character !, @, #, $, %, ^, &, and/or *',
-      }),
+    password: Yup.string().required().password(),
     // code: Yup.string().min(6).required(),
   });
 
@@ -122,24 +103,6 @@ const ResetPassword: React.FC<Props> = ({ error, location }) => {
             >
               {({ errors, touched, getFieldProps, handleSubmit, values, setFieldValue }) => (
                 <Form onSubmit={handleSubmit} autoComplete="off" className="ctn-uam__form">
-                  {/* <View isRow className="mb-32" align="center">
-                    <Text className="">Check your email and enter your verification code. </Text>
-                    {isResending ? (
-                      <LoadingCommon className="fit-width" />
-                    ) : (
-                      <Link
-                        onClick={() => handleSendAgain(values.email)}
-                        className="text-is-14 fw-medium"
-                      >
-                        Resend
-                      </Link>
-                    )}
-                  </View> */}
-                  {/* <ComfirmationCodeField
-                    onChange={(value) => setFieldValue('code', value)}
-                    errorMessage={touched.code ? errors.code : ''}
-                    containerClassName="mb-40"
-                  /> */}
                   <InputPassword
                     label="New Password"
                     placeholder="New Password"
@@ -170,15 +133,8 @@ const ResetPassword: React.FC<Props> = ({ error, location }) => {
 type Props = ReturnType<typeof mapStateToProps> &
   typeof mapDispatchToProps & { location: Location<string> };
 
-const mapStateToProps = (state: IRootState) => ({
-  error: state.auth.error,
-  loading: state.auth.loading,
-  isResetPasswordSuccess: state.auth.isResetPasswordSuccess,
-});
+const mapStateToProps = (state: IRootState) => ({});
 
-const mapDispatchToProps = {
-  // onResetPassword: submitForgotPasswordAsync.request,
-  // onClearResetPasswordSuccess: setResetPasswordSuccess,
-};
+const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);

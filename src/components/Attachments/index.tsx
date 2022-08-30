@@ -80,12 +80,9 @@ type Props = ReturnType<typeof mapStateToProps> &
     onDelete?: Callback;
   };
 
-const mapStateToProps = (state: IRootState) => ({
-  // content: state.content.content,
-});
+const mapStateToProps = (state: IRootState) => ({});
 
 const mapDispatchToProps = {
-  // onRemoveTestingAttachment: removeTestingAttachmentAsync.request,
   onShowModal: showModal,
   onHideModal: closeModal,
 };
