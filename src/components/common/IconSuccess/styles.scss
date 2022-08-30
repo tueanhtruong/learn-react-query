@@ -3,7 +3,7 @@
 
 .icon-success {
   display: inline-flex;
-  background-color: $color-primary;
+  background-color: $color-success;
   border-radius: 999px;
   justify-content: center;
   align-items: center;
@@ -32,6 +32,7 @@
       from {
         stroke-dashoffset: 66;
       }
+
       to {
         stroke-dashoffset: 42;
       }

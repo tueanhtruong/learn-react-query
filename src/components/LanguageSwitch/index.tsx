@@ -24,7 +24,6 @@ const LanguageSwitch: React.FC<Props> = ({
   const [selected, setSelected] = useState(LanguageService.getLanguage());
 
   const handleTriggerChange = async (language) => {
-    console.log('handleTriggerChange language: ', language);
     // onSetChangingLocale(true);
     await waiter(400);
     i18n.changeLanguage(language);

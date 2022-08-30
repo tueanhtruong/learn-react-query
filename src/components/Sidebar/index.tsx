@@ -9,6 +9,7 @@ import { hasPagePermission } from 'src/validations/permissions';
 import './styles.scss';
 import { IMAGES } from 'src/appConfig/images';
 import { setCollapseSidebar } from 'src/redux/content/contentSlice';
+import { Navigator } from 'src/services';
 // import { setCollapseSidebar } from 'src/redux/commonRedux/actions';
 // import { Navigator } from 'src/services';
 
@@ -65,7 +66,9 @@ const Sidebar: React.FC<Props> = ({
                     'cmp-sidebar__item--closed': isCollapse && !showMiniSidebar,
                   })}
                   onClick={
-                    () => {}
+                    () => {
+                      Navigator.navigate(item.href);
+                    }
                     // myPermissions?.webAdmin?.canView
                     //   ? Navigator.jumpToWebAdmin(item.href)
                     //   : Navigator.jumpToWebApp(item.href)

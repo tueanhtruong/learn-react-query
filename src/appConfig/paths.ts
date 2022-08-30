@@ -15,15 +15,11 @@ export const PATHS = {
   editMyProfile: '/me/edit',
   configureNotification: '/me/notification',
 
-  // ======== Home ========
-  home: '/',
-  dashboard: '/dashboard',
-  configurationManagement: '/configuration-management',
-  userManagement: '/user-management',
-  propertyManagement: '/property-management',
-  workflowConfiguration: '/workflow-configuration',
-  workQueueManagement: '/work-queue-management',
-  formManagement: '/form-management',
+  // ======== Feature ========
+  travelers: '/travelers',
+  travelerDetail: '/travelers/:id',
+  trips: '/trips',
+  tripDetail: '/trips/:id',
 };
 
 export const PATH_HEADERS = {

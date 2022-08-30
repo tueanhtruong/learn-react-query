@@ -4,18 +4,31 @@ import { History } from 'history';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useComponentDidMount } from 'src/hooks';
-import { useProfile } from 'src/queries';
+import { useProfile, useTravelers, useTrips } from 'src/queries';
 import { setAuthenticated } from 'src/redux/auth/authSlice';
-import { hideModal } from 'src/redux/modal/modalSlice';
+import { setShowNavbar, setShowSidebar } from 'src/redux/content/contentSlice';
 import { IRootState } from 'src/redux/rootReducer';
 import { TokenService } from 'src/services';
 
-const AuthContainer: React.FC<Props> = ({ history, onSetAuth }) => {
+const AuthContainer: React.FC<Props> = ({
+  history,
+  onSetAuth,
+  onSetShowNavBar,
+  onSetShowSidebar,
+}) => {
   // =========================== Didmount ===========================
   const { getMyProfile, handleSetProfile } = useProfile({
     onSuccess(data) {
-      if (data) onSetAuth(true);
+      if (data) handleSetAuthenticated();
     },
+    onError(err) {
+      clearAuth();
+    },
+  });
+  const { handleSetStaleData } = useTravelers({
+    enabled: false,
+  });
+  const { handleSetStaleTripData } = useTrips({
     enabled: false,
   });
   useComponentDidMount(() => {
@@ -35,6 +48,12 @@ const AuthContainer: React.FC<Props> = ({ history, onSetAuth }) => {
       clearAuth();
     }
   });
+
+  const handleSetAuthenticated = () => {
+    onSetAuth(true);
+    onSetShowNavBar(true);
+    onSetShowSidebar(true);
+  };
 
   const authLogin = (res: { payload: { event: string; data?: any } }) => {
     const { payload } = res;
@@ -56,12 +75,17 @@ const AuthContainer: React.FC<Props> = ({ history, onSetAuth }) => {
   };
 
   const clearAuth = () => {
+    console.log('call clearAuth: ');
     onSetAuth(false);
     handleSetProfile(null);
-    // onSetMyPermissions([]);
+    onSetShowNavBar(false);
+    onSetShowSidebar(false);
+    handleSetStaleData();
+    handleSetStaleTripData();
   };
 
   const authenticate = () => {
+    console.log('call authenticate: ');
     // 2. Get current user
     Auth.currentAuthenticatedUser()
       .then((user) => {
@@ -83,7 +107,8 @@ const mapStateToProps = (state: IRootState) => ({
 
 const mapDispatchToProps = {
   onSetAuth: setAuthenticated,
-  onCloseModal: hideModal,
+  onSetShowNavBar: setShowNavbar,
+  onSetShowSidebar: setShowSidebar,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthContainer));

@@ -2,9 +2,10 @@
 import cn from 'classnames';
 import { Formik, FormikProps } from 'formik';
 import { History } from 'history';
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import { IMAGES } from 'src/appConfig/images';
+import { MODAL_TYPES } from 'src/appConfig/modal';
 import { PATHS } from 'src/appConfig/paths';
 import {
   Button,
@@ -16,11 +17,13 @@ import {
   Text,
   View,
 } from 'src/components/common';
-import { useLogin, useProfile } from 'src/queries';
-// import Footer from 'src/components/Footer';
-// import { signInAsync } from 'src/redux/authRedux/actions';
+import Logo from 'src/components/Logo';
+import { SignInPayload, useLogin, useProfile, useResendSignUp } from 'src/queries';
+import { hideModal, showModal } from 'src/redux/modal/modalSlice';
 import { IRootState } from 'src/redux/rootReducer';
 import { ErrorService, Navigator, Yup } from 'src/services';
+import EmailConfirmationModal from '../EmailConfirmationModal';
+import MFAConfirmationModal from '../MFAConfirmationModal';
 import './styles.scss';
 
 type FormValue = {
@@ -30,23 +33,38 @@ type FormValue = {
 
 const INTIAL: FormValue = { email: '', password: '' };
 
-const Signin: React.FC<Props> = ({ error }) => {
+const Signin: React.FC<Props> = ({ onShowModal, onHideModal }) => {
   const formRef = useRef<FormikProps<FormValue>>(null);
-  const { login, isSigning } = useLogin();
+  const { login, isSigning } = useLogin({
+    onSuccess(data, variables, context) {
+      if (data.challengeName === 'CUSTOM_CHALLENGE')
+        onShowModal({
+          type: MODAL_TYPES.contentModal,
+          data: {
+            content: <MFAConfirmationModal user={data} signInPayload={variables} />,
+          },
+        });
+    },
+    onError(error, variables, context) {
+      handleError(error, variables);
+    },
+  });
   const { loading } = useProfile();
 
-  useEffect(() => {
-    if (error) handleError(error);
-  }, [error]);
+  const { resendSignUp } = useResendSignUp();
 
   const handleLogin = (values: FormValue) => {
     const { email, password } = values;
-    // console.log('email, password: ', email, password);
-    // onSignIn({ username: email.trim(), password: password.trim() });
+
     login({ username: email.trim(), password: password.trim() });
   };
 
-  const handleError = (error: AuthError) => {
+  const handleConfirmSuccess = (payload: SignInPayload) => {
+    onHideModal();
+    login(payload);
+  };
+
+  const handleError = (error: AuthError, variables: SignInPayload) => {
     switch (error.code) {
       case 'NotAuthorizedException':
         return formRef.current.setErrors({
@@ -57,8 +75,24 @@ const Signin: React.FC<Props> = ({ error }) => {
       case 'UserNotFoundException':
         return formRef.current.setErrors({ email: ErrorService.MESSAGES.accountNotExist });
 
-      // this case is handled in auth saga, skip here to not show toast message
       case 'UserNotConfirmedException':
+        resendSignUp({ username: variables.username });
+        return onShowModal({
+          type: MODAL_TYPES.contentModal,
+          data: {
+            content: (
+              <EmailConfirmationModal
+                username={variables.username}
+                onConfirmSuccess={() =>
+                  handleConfirmSuccess({
+                    username: variables.username,
+                    password: variables.password,
+                  })
+                }
+              />
+            ),
+          },
+        });
       case 'UsernameExistsException':
         return;
 
@@ -87,8 +121,10 @@ const Signin: React.FC<Props> = ({ error }) => {
       <Image className="ctn-uam__image" src={IMAGES.backgroundLogin} />
       <View className="container" flexGrow={1}>
         <View className="ctn-uam__container" flexGrow={1}>
-          <Image className="ctn-uam__logo mb-36" src={IMAGES.datahouseLogo} />
-          <h1 className={cn('ctn-uam__title mb-24')}>{'Sign In'}</h1>
+          {/* <Image className="ctn-uam__logo mb-36" src={IMAGES.datahouseLogo} />
+           */}
+          <Logo className="mb-36" />
+          <h1 className={cn('ctn-uam__title mb-24')}>{'Log In'}</h1>
           <Formik
             initialValues={INTIAL}
             onSubmit={handleLogin}
@@ -98,14 +134,14 @@ const Signin: React.FC<Props> = ({ error }) => {
             {({ values, errors, touched, getFieldProps, handleSubmit }) => (
               <Form onSubmit={handleSubmit} autoComplete="off" className="ctn-uam__form">
                 <Input
-                  label="Email Address"
+                  label="Email Address *"
                   placeholder="Email Address"
                   errorMessage={touched.email ? errors.email : ''}
                   containerClassName="mb-16"
                   {...getFieldProps('email')}
                 />
                 <InputPassword
-                  label="Password"
+                  label="Password *"
                   placeholder="Password"
                   errorMessage={touched.password ? errors.password : ''}
                   containerClassName="mb-16"
@@ -115,7 +151,7 @@ const Signin: React.FC<Props> = ({ error }) => {
                 <Button
                   type="button"
                   variant="link"
-                  className="ctn-uam__link mb-24"
+                  className="ctn-uam__link mb-24 fw-medium"
                   onClick={() => handleForgotPassword(values)}
                 >
                   Forgot Password?
@@ -131,7 +167,10 @@ const Signin: React.FC<Props> = ({ error }) => {
                 </Button>
 
                 <Text className="text-center my-2" size={14}>
-                  No account yet? <NavLink to={PATHS.signUp}>Create an Account</NavLink>
+                  Don’t have account?{' '}
+                  <NavLink className={'fw-medium'} to={PATHS.signUp}>
+                    Create
+                  </NavLink>
                 </Text>
               </Form>
             )}
@@ -146,11 +185,13 @@ type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & { 
 
 const mapStateToProps = (state: IRootState) => ({
   // isSigningIn: state.auth.is,
-  error: state.auth.error,
+  // error: state.auth.error,
 });
 
 const mapDispatchToProps = {
   // onSignIn: signInAsync.request,
+  onShowModal: showModal,
+  onHideModal: hideModal,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Signin);

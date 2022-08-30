@@ -21,7 +21,7 @@ export async function authResponseWrapper<T>(func: ApiCall, [...args]: any[] = [
   return new Promise(async (res, rej) => {
     try {
       const response = (await func(...args)) || {};
-      res(response.data);
+      res(response);
     } catch (err) {
       rej(err);
     }

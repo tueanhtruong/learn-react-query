@@ -20,7 +20,8 @@
   ],
   "files.exclude": {
     ".husky": true,
-    "bin": true
+    "bin": true,
+    "node_modules": true
   },
   "files.eol": "\n",
   "editor.tabSize": 2,

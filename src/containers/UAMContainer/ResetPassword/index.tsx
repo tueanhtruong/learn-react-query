@@ -21,11 +21,9 @@ import Form from 'src/components/common/Form';
 import { IMAGES } from 'src/appConfig/images';
 import { PATHS } from 'src/appConfig/paths';
 import { ErrorService, Navigator, Yup } from 'src/services';
-// import { submitForgotPasswordAsync } from 'src/redux/authRedux/actions';
-import { getLocationState } from 'src/utils';
-import ComfirmationCodeField from 'src/components/ComfirmationCodeField';
-import { useComponentWillUnmount } from 'src/hooks';
-import { setResetPasswordSuccess } from 'src/redux/auth/authSlice';
+
+import { useSubmitForgotPassword } from 'src/queries';
+import Logo from 'src/components/Logo';
 
 type FormValue = {
   email: string;
@@ -35,50 +33,50 @@ type FormValue = {
 
 const INTIAL = { password: '', email: '', code: '' };
 
-const ResetPassword: React.FC<Props> = ({
-  error,
-  location,
-  isResetPasswordSuccess,
-  loading,
-  onClearResetPasswordSuccess,
-  // onResetPassword,
-}) => {
+const ResetPassword: React.FC<Props> = ({ error, location }) => {
   // const query = new URLSearchParams(location.search);
+  const query = new URLSearchParams(location.search);
+
   const formRef = useRef<FormikProps<FormValue>>(null);
   const [isPasswordUpdated, setIsPasswordUpdated] = useState(false);
+  const { submitForgotPassword, isLoading } = useSubmitForgotPassword({
+    onSuccess(data, variables, context) {
+      setIsPasswordUpdated(true);
+    },
+    onError(error, variables, context) {
+      ErrorService.handler(error);
+    },
+  });
 
-  useComponentWillUnmount(() => onClearResetPasswordSuccess(null));
+  // const { forgotPassword } = useForgotPassword();
+
+  // const handleSendAgain = (email: string) => {
+  //   forgotPassword({ email });
+  // };
 
   useEffect(() => {
-    const state = getLocationState(location);
-    if (!state?.email) {
-      Navigator.navigate(PATHS.forgotPassword);
-      return;
-    }
-    formRef.current.setValues({ email: state.email as string, password: '', code: '' });
+    // const state = getLocationState(location);
+    // if (!state?.email) {
+    //   Navigator.navigate(PATHS.forgotPassword);
+    //   return;
+    // }
+    // formRef.current.setValues({ email: state.email as string, password: '', code: '' });
     // Check for query params "email" and "token". Should be included in link sent to email from forgot password submission.
     // setEmail(state.email as string);
-    // if (!query.has('email') || !query.has('token')) {
-    //   Navigator.navigate(PATHS.forgotPassword);
-    // }
-
-    // return () => onClearResetPasswordSuccess(null);
+    if (!query.has('email') || !query.has('token')) {
+      Navigator.navigate(PATHS.forgotPassword);
+    }
   }, []);
-
-  useEffect(() => {
-    if (error) ErrorService.handler(error);
-  }, [error]);
-
-  useEffect(() => {
-    if (isResetPasswordSuccess) setIsPasswordUpdated(true);
-  }, [isResetPasswordSuccess]);
 
   // =========================== RESET PASSWORD ===========================
   const handleResetPassword = (values: FormValue, helpers: FormikHelpers<FormValue>) => {
-    const { password, code, email } = values;
-    const body = { email: email.trim(), password: password.trim(), token: code };
-    console.log('onResetPassword body: ', body);
-    // onResetPassword(body);
+    const { password } = values;
+    const body = {
+      email: query.get('email'),
+      password: password.trim(),
+      token: query.get('token'),
+    };
+    submitForgotPassword(body);
   };
 
   const handleBackToLogin = () => {
@@ -94,7 +92,7 @@ const ResetPassword: React.FC<Props> = ({
         message:
           'Must include at least one lowercase character, one uppercase character, one number, and a special character !, @, #, $, %, ^, &, and/or *',
       }),
-    code: Yup.string().min(6).required(),
+    // code: Yup.string().min(6).required(),
   });
 
   return (
@@ -102,20 +100,16 @@ const ResetPassword: React.FC<Props> = ({
       <Image className="ctn-uam__image" src={IMAGES.backgroundLogin} />
       <View className="container" flexGrow={1}>
         <View className="ctn-uam__container" flexGrow={1}>
-          <Image className="ctn-uam__logo mb-36" src={IMAGES.datahouseLogo} />
-          <h1 className={cn('ctn-uam__title mb-24')}>
+          <Logo className="mb-36" />
+          {/* <Image className="ctn-uam__logo mb-36" src={IMAGES.datahouseLogo} /> */}
+          <h1 className={cn('ctn-uam__title mb-24 fw-bold')}>
             {isPasswordUpdated ? 'Password Updated' : 'Reset Your Password'}
           </h1>
 
           {isPasswordUpdated ? (
             <>
               <Text className={cn('mb-36')}>{'Your password has been successfully updated.'}</Text>
-              <Button
-                onClick={handleBackToLogin}
-                variant="secondary"
-                className="mb-8"
-                isLoading={loading}
-              >
+              <Button onClick={handleBackToLogin} variant="secondary" className="mb-8">
                 Log In
               </Button>
             </>
@@ -128,12 +122,24 @@ const ResetPassword: React.FC<Props> = ({
             >
               {({ errors, touched, getFieldProps, handleSubmit, values, setFieldValue }) => (
                 <Form onSubmit={handleSubmit} autoComplete="off" className="ctn-uam__form">
-                  <Text className="mb-32">Check your email and enter your verification code.</Text>
-                  <ComfirmationCodeField
+                  {/* <View isRow className="mb-32" align="center">
+                    <Text className="">Check your email and enter your verification code. </Text>
+                    {isResending ? (
+                      <LoadingCommon className="fit-width" />
+                    ) : (
+                      <Link
+                        onClick={() => handleSendAgain(values.email)}
+                        className="text-is-14 fw-medium"
+                      >
+                        Resend
+                      </Link>
+                    )}
+                  </View> */}
+                  {/* <ComfirmationCodeField
                     onChange={(value) => setFieldValue('code', value)}
                     errorMessage={touched.code ? errors.code : ''}
                     containerClassName="mb-40"
-                  />
+                  /> */}
                   <InputPassword
                     label="New Password"
                     placeholder="New Password"
@@ -142,7 +148,7 @@ const ResetPassword: React.FC<Props> = ({
                     {...getFieldProps('password')}
                   />
                   <ValidatePassword className="mb-16" password={values.password} />
-                  <Button type="submit" variant="secondary" className="mb-8" isLoading={loading}>
+                  <Button type="submit" variant="secondary" className="mb-8" isLoading={isLoading}>
                     Reset
                   </Button>
                 </Form>
@@ -151,7 +157,7 @@ const ResetPassword: React.FC<Props> = ({
           )}
 
           {!isPasswordUpdated && (
-            <Text className="my-2" size={14}>
+            <Text className="my-2 fw-medium text-center" size={14}>
               <NavLink to={PATHS.signIn}>Back to Sign In</NavLink>
             </Text>
           )}
@@ -172,7 +178,7 @@ const mapStateToProps = (state: IRootState) => ({
 
 const mapDispatchToProps = {
   // onResetPassword: submitForgotPasswordAsync.request,
-  onClearResetPasswordSuccess: setResetPasswordSuccess,
+  // onClearResetPasswordSuccess: setResetPasswordSuccess,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResetPassword);

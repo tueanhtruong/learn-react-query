@@ -4,6 +4,7 @@ import datahouseLogo from 'src/assets/images/datahouse-logo.svg';
 import datahouseMiniLogo from 'src/assets/images/datahouse-mini-logo.svg';
 import defaultAvatar from 'src/assets/images/default-avatar.svg';
 import defaultUser from 'src/assets/images/default-user.png';
+import dlirLogo from 'src/assets/images/dlir-logo.svg';
 import eventsPlaceholder from 'src/assets/images/events-placeholder.svg';
 import googleAuthenticator from 'src/assets/images/google-authenticator.png';
 import logo from 'src/assets/images/logos/logo.png';
@@ -26,4 +27,5 @@ export const IMAGES = {
   sidebarPlaceholder,
   defaultAvatar,
   eventsPlaceholder,
+  dlirLogo,
 };

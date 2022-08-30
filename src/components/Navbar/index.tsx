@@ -4,19 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { FiLogOut, FiUser } from 'react-icons/fi';
 import { connect } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import { IMAGES } from 'src/appConfig/images';
 import { HIDE_NAV_PATHS, PATHS } from 'src/appConfig/paths';
 import { setCollapseSidebar } from 'src/redux/content/contentSlice';
-// import { signOutAsync } from 'src/redux/authRedux/actions';
-// import { setCollapseSidebar } from 'src/redux/commonRedux/actions';
 import { IRootState } from 'src/redux/rootReducer';
 import { Callback } from 'src/redux/types';
 import { Navigator } from 'src/services';
-import { AvatarImage, Button, CustomDropdown, Image, NavLink, Text, View } from '../common';
+import { AvatarImage, Button, CustomDropdown, NavLink, Text, View } from '../common';
 import { ButtonVariant } from '../common/Button';
-import FileRenderer from '../FileRenderer';
-import LanguageSwitch from '../LanguageSwitch';
-// import BurgerButton from './BurgerButton';
 import './styles.scss';
 
 const NAV_TYPES = {
@@ -43,7 +37,6 @@ type NavItemType = {
 
 const Navbar: React.FC<Props> = ({
   user,
-  profile,
   showNavbar,
   showSidebar,
   // showSecondBurger,
@@ -60,12 +53,10 @@ const Navbar: React.FC<Props> = ({
   const location = useLocation();
 
   const getUserName = () => {
-    if (!profile?.firstName) return 'Anonymous';
-    return `${profile.firstName} ${profile.lastName}`;
+    return 'Anonymous';
   };
   const getUserNameKey = () => {
-    if (!user?.firstName) return '--';
-    return `${user.firstName?.[0]}${user.lastName?.[0]}`;
+    return '--';
   };
 
   // menu
@@ -82,15 +73,13 @@ const Navbar: React.FC<Props> = ({
       id: 'UserName',
       label: (
         <View isRowWrap align="center">
-          {profile?.avatarUrl ? (
-            <FileRenderer
+          {/* <FileRenderer
               isUpdateOnChange
               url={profile?.avatarUrl}
               imageClassName="cmp-navbar__avatar cmp-navbar__end--avatar cmp-file-upload__avatar"
-            />
-          ) : (
-            <AvatarImage title={getUserNameKey()} className="cmp-navbar__end--avatar" />
-          )}
+            /> */}
+
+          <AvatarImage title={getUserNameKey()} className="cmp-navbar__end--avatar" />
 
           <View className="text-left" renderIf={!showMiniSidebar}>
             <Text>{getUserName()}</Text>
@@ -155,7 +144,6 @@ const Navbar: React.FC<Props> = ({
             to={item.href}
             label={i18n.t(item.label as string)}
             activeClassName="cmp-navbar__end--item--active"
-            // disabled={true}
           />
         );
       case NAV_TYPES.isButton:
@@ -224,18 +212,11 @@ const Navbar: React.FC<Props> = ({
     >
       <View className="cmp-navbar__container c-container">
         <View isRow flexGrow={1} className={cn('cmp-navbar__branch', 'navbar-brand')}>
-          {/* <BurgerButton
-            className={cn('cmp-navbar__sidebar-burger', { show: showSecondBurger })}
-            target="sidebar-menu"
-            isActive={!collapseSidebar}
-            onClick={() => onSetCollapseSidebar(!collapseSidebar)}
-          /> */}
-
           <Link className={cn('justify-center')} to={PATHS.root}>
             {/* <Image className={'cmp-navbar__logo'} src={IMAGES.logoLumisightFull} /> */}
             {/* <View className="fw-bold has-text-black cmp-navbar__title"> */}
             {/* {PATH_HEADERS[location.pathname] || _.startCase(location.pathname)} */}
-            <Image
+            {/* <Image
               className="cmp-landing-nav__logo hide-on-mobile"
               src={IMAGES.datahouseLogo}
               alt="Unset"
@@ -244,16 +225,9 @@ const Navbar: React.FC<Props> = ({
               className="cmp-landing-nav__logo hide-on-desktop"
               src={IMAGES.datahouseMiniLogo}
               alt="Unset"
-            />
+            /> */}
             {/* </View> */}
           </Link>
-
-          {/* <BurgerButton
-            className="cmp-navbar__burger"
-            target="navigation-menu"
-            isActive={toggleNavbar}
-            onClick={() => setToggleNavbar(!toggleNavbar)}
-          /> */}
         </View>
 
         <View
@@ -265,10 +239,10 @@ const Navbar: React.FC<Props> = ({
         >
           <View isRow className={cn('navbar-end cmp-navbar__end')}>
             {renderNavListItems(listItems)}
-            <LanguageSwitch
+            {/* <LanguageSwitch
               containerClassName="cmp-navbar__end--item is-no-margin"
               labelClassName={cn('cmp-navbar__end--dropdown-item')}
-            />
+            /> */}
           </View>
         </View>
       </View>
@@ -279,10 +253,8 @@ const Navbar: React.FC<Props> = ({
 type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
 const mapStateToProps = (state: IRootState) => ({
   user: state.auth.cognitoUser,
-  profile: state.profile.myProfile,
   isAuthenticated: state.auth.isAuthenticated,
   collapseSidebar: state.content.collapseSidebar,
-  // showSecondBurger: state.content.showSecondBurger,
   showSidebar: state.content.showSidebar,
   showNavbar: state.content.showNavbar,
   showMiniSidebar: state.content.showMiniSidebar,

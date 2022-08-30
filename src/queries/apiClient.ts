@@ -1,5 +1,5 @@
 import { API } from 'src/services';
 
-const api = API.create();
+const apiClient = API.create();
 
-export default api;
+export default apiClient;

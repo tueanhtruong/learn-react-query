@@ -1,13 +1,15 @@
-export interface Todo {
-  userId: number;
+export interface Content {
   id: number;
   title: string;
   completed: boolean;
+  key?: string;
+  name?: string;
+  description?: string;
 }
 
 export type ContentStore = {
-  cities: Todo[];
-  countries: Todo[];
-  states: Todo[];
-  departments: Todo[];
+  cities: Content[];
+  countries: Content[];
+  states: Content[];
+  departments: Content[];
 };

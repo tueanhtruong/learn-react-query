@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default () => {
   return (
     <ToastContainer
-      position="top-right"
+      position="top-center"
       autoClose={5000}
       icon={false}
       hideProgressBar={false}

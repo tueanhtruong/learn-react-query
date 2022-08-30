@@ -1,27 +1,28 @@
 import { QueryFunction, useQuery, useQueryClient, UseQueryOptions } from 'react-query';
-import { Profile } from 'src/redux/profile/types';
-import api from '../apiClient';
+import apiClient from '../apiClient';
 import { responseWrapper } from '../helpers';
 import { API_QUERIES } from '../keys';
+import { User } from './types';
 
-export function useProfile(options?: UseQueryOptions<unknown, Error, Profile, API_QUERIES>) {
-  const handleGetProfile: QueryFunction<Profile, API_QUERIES> = (params) =>
-    responseWrapper<Profile>(api.getMyProfile);
+export function useProfile(options?: UseQueryOptions<User, Error>) {
+  const handleGetProfile: QueryFunction<User, API_QUERIES> = () =>
+    responseWrapper<User>(apiClient.getMyProfile);
   const {
     data: profile,
     error,
     isError,
     isFetching,
     refetch: getMyProfile,
-  } = useQuery<unknown, Error, Profile, API_QUERIES>(API_QUERIES.PROFILE, {
+  } = useQuery<User, Error>(API_QUERIES.PROFILE, {
     queryFn: handleGetProfile,
     refetchOnMount: false,
+    enabled: false,
     ...options,
   });
 
   const queryClient = useQueryClient();
 
-  const handleSetProfile = (value: Profile) => queryClient.setQueryData(API_QUERIES.PROFILE, value);
+  const handleSetProfile = (value: User) => queryClient.setQueryData(API_QUERIES.PROFILE, value);
 
   return {
     profile,

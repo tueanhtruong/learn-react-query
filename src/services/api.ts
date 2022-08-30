@@ -2,7 +2,16 @@ import apisauce from 'apisauce';
 import { Auth } from 'aws-amplify';
 import axios from 'axios';
 import appConfig from 'src/appConfig';
-import { SignInPayload, SignUpPayload } from 'src/redux/auth/types';
+import {
+  ChangePasswordPayload,
+  ConfirmSignInPayload,
+  ConfirmSignUpPayload,
+  ForgotPasswordPayload,
+  ResendSignUpPayload,
+  SignInPayload,
+  SignUpPayload,
+  SubmitForgotPasswordPayload,
+} from 'src/queries/UAM/types';
 
 import { newCancelToken, stringify } from 'src/utils';
 import { TokenService } from '.';
@@ -54,31 +63,31 @@ const create = (baseURL = appConfig.API_URL) => {
     return Auth.signUp({ ...params, attributes });
   };
 
-  // const resendSignUp = (body: ResendSignUpPayload) => Auth.resendSignUp(body.username);
+  const resendSignUp = (body: ResendSignUpPayload) => Auth.resendSignUp(body.username);
 
-  // const confirmSignUp = (body: ConfirmSignUpPayload) =>
-  //   Auth.confirmSignUp(body.username, body.code);
+  const confirmSignUp = (body: ConfirmSignUpPayload) =>
+    Auth.confirmSignUp(body.username, body.code);
 
   const signOut = () => Auth.signOut();
 
   // const getPermission = () => api.get('/me/permission', {}, newCancelToken());
 
-  // const forgotPassword = (body: ForgotPasswordPayload) => Auth.forgotPassword(body.email);
+  const forgotPassword = (body: ForgotPasswordPayload) => Auth.forgotPassword(body.email);
 
-  // const submitForgotPassword = (body: SubmitForgotPasswordPayload) =>
-  //   Auth.forgotPasswordSubmit(body.email, body.token, body.password);
+  const submitForgotPassword = (body: SubmitForgotPasswordPayload) =>
+    Auth.forgotPasswordSubmit(body.email, body.token, body.password);
 
-  // const changePassword = (body: ChangePasswordPayload) =>
-  //   Auth.changePassword(body.user, body.currentPassword, body.newPassword);
+  const changePassword = (body: ChangePasswordPayload) =>
+    Auth.changePassword(body.user, body.currentPassword, body.newPassword);
 
-  // const confirmSignIn = (body: ConfirmSignInPayload) =>
-  //   Auth.sendCustomChallengeAnswer(body.user, body.code);
+  const confirmSignIn = (body: ConfirmSignInPayload) =>
+    Auth.sendCustomChallengeAnswer(body.user, body.code);
 
   // const completeNewPassword = (body: CompleteNewPasswordPayload) =>
   //   Auth.completeNewPassword(body.user, body.password, body.requiredAttributes);
 
   // ====================== Profile ======================
-  const getMyProfile = () => api.get('/me', {}, newCancelToken());
+  const getMyProfile = () => api.get('/user-svc/v1/me', {}, newCancelToken());
   const getMyNotificationSetting = () =>
     api.get('/me/notification-configuration', {}, newCancelToken());
   const updateMyNotificationSetting = (body) =>
@@ -89,7 +98,7 @@ const create = (baseURL = appConfig.API_URL) => {
 
   // ====================== Content ======================
   // const getContent = () => api.get('/content', {}, newCancelToken());
-  const getContent = () => api.get('/contents', {}, newCancelToken());
+  const getContent = () => api.get('/content', {}, newCancelToken());
 
   const getContentDepartments = () => api.get('/contents/departments', {}, newCancelToken());
   const getContentCountries = () => api.get('/contents/countries', {}, newCancelToken());
@@ -134,13 +143,19 @@ const create = (baseURL = appConfig.API_URL) => {
     return api.get(`${appConfig.API_URL}/users/search?${queryString}`, {}, newCancelToken());
   };
 
+  // ====================== Travelers ======================
+  const getAllTravelers = () => api.get('/traveler', {}, newCancelToken());
+  // ====================== Trips ======================
+  const getAllTrips = () => api.get('/trip?timezoneOffset=7', {}, newCancelToken());
+  const getTripDetail = (id) => api.get(`/trip/${id}`, {}, newCancelToken());
+
+  // const getAllEvents = () => api.get('/events', {}, newCancelToken());
+  // const getMyEvents = () => api.get('/events/me', {}, newCancelToken());
+  // const getMyEventDetail = (params: { id: string }) =>
+  //   api.get(`/events/me/${params.id}`, {}, newCancelToken());
+  // const addNewEvent = (params: { id: string }) =>
+  //   api.post(`/events/${params.id}/register`, {}, newCancelToken());
   // ====================== Events ======================
-  const getAllEvents = () => api.get('/events', {}, newCancelToken());
-  const getMyEvents = () => api.get('/events/me', {}, newCancelToken());
-  const getMyEventDetail = (params: { id: string }) =>
-    api.get(`/events/me/${params.id}`, {}, newCancelToken());
-  const addNewEvent = (params: { id: string }) =>
-    api.post(`/events/${params.id}/register`, {}, newCancelToken());
 
   //
   // Return back a collection of functions that we would consider our
@@ -154,15 +169,15 @@ const create = (baseURL = appConfig.API_URL) => {
     getRoot,
     // ====================== Auth ======================
     // getPermission,
-    // confirmSignIn,
+    confirmSignIn,
     signIn,
     signUp,
-    // resendSignUp,
-    // confirmSignUp,
+    resendSignUp,
+    confirmSignUp,
     signOut,
-    // forgotPassword,
-    // submitForgotPassword,
-    // changePassword,
+    forgotPassword,
+    submitForgotPassword,
+    changePassword,
     // completeNewPassword,
 
     // ====================== File ======================
@@ -188,11 +203,16 @@ const create = (baseURL = appConfig.API_URL) => {
     searchUserAccounts,
     searchUserAccountsAxios,
     searchUserAccountsByOrderAxios,
+    // ====================== Travelers ======================
+    getAllTravelers,
+    // ====================== Trips ======================
+    getAllTrips,
+    getTripDetail,
     // ====================== Events ======================
-    getAllEvents,
-    getMyEventDetail,
-    getMyEvents,
-    addNewEvent,
+    // getAllEvents,
+    // getMyEventDetail,
+    // getMyEvents,
+    // addNewEvent,
   };
 };
 

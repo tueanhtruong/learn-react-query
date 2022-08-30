@@ -48,6 +48,8 @@ import {
 import { Toastify } from 'src/services';
 import { DateRange } from 'src/components/common/DateRangePicker';
 import { hideModal, showModal } from 'src/redux/modal/modalSlice';
+import { TabsBar } from 'src/components/TabsBar';
+import DevPagev2 from './devPagev2';
 
 const Dev: React.FC<Props> = ({ showModal, closeModal, collapseSidebar }) => {
   const [files, setFiles] = useState<File[]>();
@@ -584,6 +586,14 @@ const Dev: React.FC<Props> = ({ showModal, closeModal, collapseSidebar }) => {
       </View>
     </View>
   );
+
+  const tabs = [
+    { id: 'v1', label: 'V1' },
+    { id: 'v2', label: 'V2' },
+  ];
+
+  const [tab, setTab] = useState<string>('v1');
+
   return (
     <View className="c-container" isRow justify="space-around">
       <LayoutWithSidebar
@@ -592,12 +602,15 @@ const Dev: React.FC<Props> = ({ showModal, closeModal, collapseSidebar }) => {
             <Sidebar />
           </View>
         }
-        body={renderBody()}
+        body={
+          <View>
+            <TabsBar tabs={tabs} selected={tab} onSelect={setTab} />
+            {tab === 'v1' && renderBody()}
+            {tab === 'v2' && <DevPagev2 />}
+          </View>
+        }
         footer={null}
       />
-      {/* <View className="mt-48 mr-20">
-        <Sidebar />
-      </View> */}
     </View>
   );
 };

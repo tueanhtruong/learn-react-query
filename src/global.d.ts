@@ -6,6 +6,7 @@ type AuthErrorCode =
   | 'ExpiredCodeException'
   | 'LimitExceededException'
   | 'InvalidPasswordException'
+  | 'InvalidParameterException'
   | 'UsernameExistsException';
 
 declare type AuthError = {

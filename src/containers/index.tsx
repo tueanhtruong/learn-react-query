@@ -26,6 +26,11 @@ import ProfileContainers from './ProfileContainers';
 import ContentContainer from './StartupContainers/ContentContainer';
 import Sidebar from 'src/components/Sidebar';
 import UploadProgressContainer from './StartupContainers/UploadProgressContainer';
+import TravelerContainers from './TravelerContainers';
+import TravelerDetail from './TravelerContainers/TravelerDetail';
+import TripDetail from './TripContainers/TripDetail';
+import TripContainers from './TripContainers';
+// import Dialog from 'src/components/Dialog';
 
 const Routing: React.FC<{ location: Location }> = (props) => {
   Navigator.setTopHistory(useHistory());
@@ -42,6 +47,15 @@ const Routing: React.FC<{ location: Location }> = (props) => {
         <CustomRoute path={PATHS.forgotPassword} component={ForgotPassword} />
         <CustomRoute path={PATHS.resetPassword} component={ResetPassword} />
         <CustomRoute pageRequiredAuth path={PATHS.myProfile} component={ProfileContainers} />
+        <CustomRoute
+          pageRequiredAuth
+          path={PATHS.travelerDetail}
+          component={TravelerDetail}
+          exact
+        />
+        <CustomRoute pageRequiredAuth path={PATHS.travelers} component={TravelerContainers} />
+        <CustomRoute pageRequiredAuth path={PATHS.tripDetail} component={TripDetail} exact />
+        <CustomRoute pageRequiredAuth path={PATHS.trips} component={TripContainers} />
         <Route path={PATHS.dev} component={Dev} />
         <CustomRoute path={PATHS.dev} component={Dev} />
         <Route component={NotFound} />
@@ -54,6 +68,7 @@ const Routing: React.FC<{ location: Location }> = (props) => {
       <ToastContainer />
       <ResponsiveContainer />
       <UploadProgressContainer />
+      {/* <Dialog /> */}
     </Screen>
   );
 };

@@ -38,9 +38,11 @@
       padding: 18px 16px 24px;
     }
   }
+
   & &__content--overflow-visible.modal-content {
     overflow: visible !important;
   }
+
   & &__content.confirmation-code-modal {
     @include mobileScreen {
       padding: 18px 56px;
@@ -61,6 +63,7 @@
     0% {
       transform: none;
     }
+
     100% {
       transform: scale(0);
     }
@@ -70,6 +73,7 @@
     0% {
       transform: scale(0);
     }
+
     100% {
       transform: none;
     }
@@ -105,6 +109,7 @@
       position: relative;
       border-top: 1px solid #e0e0e0;
       padding: 16px 56px 0;
+
       @include mobileScreen {
         margin: 0px -16px;
         padding: 16px 16px 0;
@@ -121,7 +126,7 @@
   &__content.ctn-modal-content {
     &__body {
       text-align: left;
-      min-width: $form-width-mini;
+      // min-width: $form-width-mini;
       width: fit-content;
 
       @include mobileScreen {

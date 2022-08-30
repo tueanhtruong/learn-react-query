@@ -26,7 +26,7 @@ const ResponsiveContainer: React.FC<Props> = ({
       } else {
         // !isCollapse && onToggleSidebar(true);
       }
-    } else {
+    } else if (!!width) {
       !isMiniSidebar && onSetMiniSidebar(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

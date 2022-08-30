@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IRootState } from 'src/redux/rootReducer';
 import {
   ContentModal,
-  EmailConfirmationModal,
+  // EmailConfirmationModal,
   Modal,
   OkModal,
   SuccessModal,
@@ -11,7 +11,7 @@ import {
 } from 'src/components/Modal';
 import { MODAL_TYPES } from 'src/appConfig/modal';
 // import { hideModal } from 'src/redux/modalRedux/actions';
-import MFAConfirmationModal from 'src/components/Modal/MFAConfirmationModal';
+// import MFAConfirmationModal from 'src/components/Modal/MFAConfirmationModal';
 import { hideModal } from 'src/redux/modal/modalSlice';
 
 const ModalContainer: React.FC<Props> = ({
@@ -22,7 +22,7 @@ const ModalContainer: React.FC<Props> = ({
   hideModal,
 }) => {
   if (!isVisible) return null;
-  const { hideCloseButton } = data;
+  const { hideCloseButton, allowCloseByEsc } = data;
 
   const notAllowClose =
     hideCloseButton ||
@@ -39,6 +39,7 @@ const ModalContainer: React.FC<Props> = ({
       hideCloseButton={notAllowClose}
       onModalClosed={hideModal}
       triggerCloseModal={startClosing}
+      allowCloseByEsc={allowCloseByEsc}
     >
       <ModalBody modalType={modalType} />
     </Modal>
@@ -51,14 +52,14 @@ const ModalBody = ({ modalType }: { modalType: string }) => {
       return <OkModal />;
     case MODAL_TYPES.yesNoModal:
       return <YesNoModal />;
-    case MODAL_TYPES.emailConfirmationModal:
-      return <EmailConfirmationModal />;
+    // case MODAL_TYPES.emailConfirmationModal:
+    //   // return <EmailConfirmationModal />;
     case MODAL_TYPES.contentModal:
       return <ContentModal />;
     case MODAL_TYPES.successModal:
       return <SuccessModal />;
-    case MODAL_TYPES.mfaConfirmationModal:
-      return <MFAConfirmationModal />;
+    // case MODAL_TYPES.mfaConfirmationModal:
+    // return <MFAConfirmationModal />;
     default:
       return <OkModal />;
   }
